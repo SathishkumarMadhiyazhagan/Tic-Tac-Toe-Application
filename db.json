@@ -1,0 +1,283 @@
+{
+  "games": [
+    {
+      "mode": "TwoPlayer",
+      "status": "InProgress",
+      "board": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "currentPlayer": "X",
+      "winner": null,
+      "winningCells": [],
+      "moveHistory": [],
+      "isResultRecorded": false,
+      "id": 1
+    },
+    {
+      "mode": "TwoPlayer",
+      "status": "InProgress",
+      "board": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "currentPlayer": "X",
+      "winner": null,
+      "winningCells": [],
+      "moveHistory": [],
+      "isResultRecorded": false,
+      "id": 2
+    },
+    {
+      "mode": "TwoPlayer",
+      "status": "InProgress",
+      "board": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "currentPlayer": "X",
+      "winner": null,
+      "winningCells": [],
+      "moveHistory": [],
+      "isResultRecorded": false,
+      "id": 3
+    },
+    {
+      "mode": "TwoPlayer",
+      "status": "InProgress",
+      "board": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "currentPlayer": "X",
+      "winner": null,
+      "winningCells": [],
+      "moveHistory": [],
+      "isResultRecorded": false,
+      "id": 4
+    },
+    {
+      "mode": "Computer",
+      "status": "InProgress",
+      "board": [
+        null,
+        null,
+        "X",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "currentPlayer": "O",
+      "winner": null,
+      "winningCells": [],
+      "moveHistory": [
+        {
+          "id": "move-1792831962421-soszq2w",
+          "moveNumber": 1,
+          "player": "X",
+          "row": 1,
+          "column": 3,
+          "cellIndex": 2
+        }
+      ],
+      "isResultRecorded": false,
+      "id": 5
+    },
+    {
+      "mode": "TwoPlayer",
+      "status": "InProgress",
+      "board": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "currentPlayer": "X",
+      "winner": null,
+      "winningCells": [],
+      "moveHistory": [],
+      "isResultRecorded": false,
+      "id": 6
+    },
+    {
+      "mode": "TwoPlayer",
+      "status": "InProgress",
+      "board": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "currentPlayer": "X",
+      "winner": null,
+      "winningCells": [],
+      "moveHistory": [],
+      "isResultRecorded": false,
+      "id": 7
+    },
+    {
+      "mode": "TwoPlayer",
+      "status": "InProgress",
+      "board": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "currentPlayer": "X",
+      "winner": null,
+      "winningCells": [],
+      "moveHistory": [],
+      "isResultRecorded": false,
+      "id": 8
+    },
+    {
+      "mode": "Computer",
+      "status": "Draw",
+      "board": [
+        "O",
+        "X",
+        "O",
+        "X",
+        "X",
+        "O",
+        "X",
+        "O",
+        "X"
+      ],
+      "currentPlayer": "X",
+      "winner": null,
+      "winningCells": [],
+      "moveHistory": [
+        {
+          "id": "move-1792832143152-ncgt7uk",
+          "moveNumber": 1,
+          "player": "X",
+          "row": 2,
+          "column": 2,
+          "cellIndex": 4
+        },
+        {
+          "id": "move-1792832143568-dnfbp3y",
+          "moveNumber": 2,
+          "player": "O",
+          "row": 1,
+          "column": 1,
+          "cellIndex": 0
+        },
+        {
+          "id": "move-1792832144268-spi3vw2",
+          "moveNumber": 3,
+          "player": "X",
+          "row": 3,
+          "column": 3,
+          "cellIndex": 8
+        },
+        {
+          "id": "move-1792832144685-62dl5pl",
+          "moveNumber": 4,
+          "player": "O",
+          "row": 1,
+          "column": 3,
+          "cellIndex": 2
+        },
+        {
+          "id": "move-1792832147144-s437vqz",
+          "moveNumber": 5,
+          "player": "X",
+          "row": 1,
+          "column": 2,
+          "cellIndex": 1
+        },
+        {
+          "id": "move-1792832147560-8kw9p41",
+          "moveNumber": 6,
+          "player": "O",
+          "row": 3,
+          "column": 2,
+          "cellIndex": 7
+        },
+        {
+          "id": "move-1792832149897-wj2hp9z",
+          "moveNumber": 7,
+          "player": "X",
+          "row": 2,
+          "column": 1,
+          "cellIndex": 3
+        },
+        {
+          "id": "move-1792832150313-fiqfhwq",
+          "moveNumber": 8,
+          "player": "O",
+          "row": 2,
+          "column": 3,
+          "cellIndex": 5
+        },
+        {
+          "id": "move-1792832151764-vlmphja",
+          "moveNumber": 9,
+          "player": "X",
+          "row": 3,
+          "column": 1,
+          "cellIndex": 6
+        }
+      ],
+      "isResultRecorded": true,
+      "id": 9
+    }
+  ],
+  "scoreboard": [
+    {
+      "id": 1,
+      "xWins": 0,
+      "oWins": 6,
+      "draws": 3
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": true,
+    "importHelpers": true,
+    "isolatedModules": true,
+    "lib": ["es2022"],
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "es2022",
+    "customConditions": ["@tic-tac-toe/source"],
+    "paths": {
+      "@tic-tac-toe/game-util-game-logic": [
+        "libs/game/util-game-logic/src/index.ts"
+      ],
+      "@tic-tac-toe/game-data-access": ["libs/game/data-access/src/index.ts"],
+      "@tic-tac-toe/game-ui-board": ["libs/game/ui-board/src/index.ts"],
+      "@tic-tac-toe/game-feature": ["libs/game/feature-game/src/index.ts"],
+      "@tic-tac-toe/scoreboard-feature": [
+        "libs/scoreboard/feature-scoreboard/src/index.ts"
+      ]
+    }
+  }
+}

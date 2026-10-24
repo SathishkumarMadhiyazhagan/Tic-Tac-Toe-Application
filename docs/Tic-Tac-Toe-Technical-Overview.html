@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tic Tac Toe — Technical Overview</title>
+  <style>
+    @page { margin: 18mm 16mm; }
+    body { font-family: "Segoe UI", Helvetica, Arial, sans-serif; font-size: 11pt; line-height: 1.45; color: #222; max-width: 210mm; margin: 0 auto; padding: 12mm; }
+    h1 { font-size: 22pt; color: #1565c0; border-bottom: 2px solid #1565c0; padding-bottom: 6px; }
+    h2 { font-size: 14pt; color: #0d47a1; margin-top: 1.4em; page-break-after: avoid; }
+    h3 { font-size: 12pt; margin-top: 1em; }
+    table { border-collapse: collapse; width: 100%; margin: 0.8em 0; font-size: 10pt; }
+    th, td { border: 1px solid #bbb; padding: 6px 8px; text-align: left; vertical-align: top; }
+    th { background: #e3f2fd; }
+    pre, code { font-family: "Consolas", monospace; font-size: 9pt; background: #f5f5f5; }
+    pre { padding: 10px; overflow-x: auto; border: 1px solid #ddd; white-space: pre-wrap; }
+    .meta { color: #555; font-size: 10pt; margin-bottom: 1.5em; }
+    ul { margin: 0.4em 0; }
+    li { margin: 0.2em 0; }
+    .page-break { page-break-before: always; }
+  </style>
+</head>
+<body>
+  <h1>Tic Tac Toe Application</h1>
+  <p class="meta"><strong>Technical overview (end-to-end)</strong> · React 18, Redux, Nx, MUI, json-server · Version 1.0</p>
+
+  <h2>1. Why this application exists</h2>
+  <p>This is a <strong>frontend-only</strong> Tic Tac Toe product built to a formal technical exercise. It shows how to:</p>
+  <ul>
+    <li>Separate <strong>UI, state, domain rules, and API</strong> in a maintainable structure.</li>
+    <li>Handle modes, undo, scoreboard, and computer AI with <strong>predictable global state (Redux)</strong>.</li>
+    <li>Use a <strong>local REST mock</strong> (json-server) without a production .NET/Node backend.</li>
+    <li>Organize code in an <strong>Nx monorepo</strong> for review and future growth.</li>
+  </ul>
+  <p><strong>Why no custom backend?</strong> Rules, validation, win/draw, undo, and AI stay in the client so reviewers can install and test quickly. The API only <strong>stores JSON</strong>; it does not enforce game rules.</p>
+
+  <h2>2. What the application provides</h2>
+  <table>
+    <tr><th>Feature</th><th>Behaviour</th></tr>
+    <tr><td>Two-player mode</td><td>Users play X and O; X starts; alternating turns.</td></tr>
+    <tr><td>Computer mode</td><td>Human is X; O moves automatically after each valid human move.</td></tr>
+    <tr><td>Board</td><td>3×3; occupied cells locked; no moves after win or draw.</td></tr>
+    <tr><td>Move history</td><td>Move #, player, row/column (1-based).</td></tr>
+    <tr><td>Undo</td><td>Two-player: one move. Computer: human+AI pair when applicable. Disabled after game ends.</td></tr>
+    <tr><td>Scoreboard</td><td>X wins, O wins, draws — once per completed game.</td></tr>
+    <tr><td>Reset game / scoreboard</td><td>Game reset keeps scoreboard; scoreboard reset does not clear the board.</td></tr>
+    <tr><td>API sync</td><td>Persist game and scoreboard via json-server.</td></tr>
+  </table>
+
+  <h2>3. Technology stack — what and why</h2>
+  <table>
+    <tr><th>Technology</th><th>Use</th><th>Why</th></tr>
+    <tr><td>React 18</td><td>UI</td><td>Functional components, hooks, standard for interactive web apps.</td></tr>
+    <tr><td>Nx</td><td>Workspace</td><td>Monorepo, serve/build/test commands, library boundaries.</td></tr>
+    <tr><td>Redux + thunk</td><td>State & async</td><td>Single store for game + scoreboard; thunks for API (per spec, no RTK).</td></tr>
+    <tr><td>MUI</td><td>Styling</td><td>Buttons, layout, tables, alerts; minimal custom CSS.</td></tr>
+    <tr><td>json-server</td><td>Mock API</td><td>REST over db.json for local persistence demo.</td></tr>
+    <tr><td>Vite</td><td>Bundler</td><td>Fast dev server under Nx.</td></tr>
+    <tr><td>Vitest + RTL</td><td>Tests</td><td>Logic, reducers, smoke UI.</td></tr>
+  </table>
+
+  <h2>4. Architecture (layers)</h2>
+  <pre>
+Browser :4200
+  apps/tic-tac-toe          → shell (Redux Provider, MUI theme, init)
+  libs/game/feature-game    → GamePage (dispatch, selectors)
+  libs/game/ui-board        → GameBoard, BoardCell (presentational)
+  libs/scoreboard/feature   → ScoreboardPanel
+  libs/game/data-access     → store, reducers, thunks, fetch API
+  libs/game/util-game-logic → pure rules, validation, AI, win/draw
+        ↓ HTTP fetch
+json-server :3000  →  db.json (games[], scoreboard[])
+  </pre>
+  <p><strong>Rule:</strong> Components do not implement win logic or AI; they dispatch thunks that call pure functions.</p>
+
+  <h2>5. Project layout (Nx)</h2>
+  <pre>
+tic-tac-toe/
+  apps/tic-tac-toe/
+  libs/game/util-game-logic/
+  libs/game/data-access/
+  libs/game/ui-board/
+  libs/game/feature-game/
+  libs/scoreboard/feature-scoreboard/
+  db.json
+  </pre>
+
+  <div class="page-break"></div>
+
+  <h2>6. Redux state</h2>
+  <h3>Game slice</h3>
+  <p>Fields include: <code>gameId</code>, <code>board</code>, <code>currentPlayer</code>, <code>mode</code>, <code>status</code>, <code>winner</code>, <code>winningCells</code>, <code>moveHistory</code>, <code>isComputerMoving</code>, <code>isResultRecorded</code>, <code>loading</code>, <code>error</code>.</p>
+  <h3>Scoreboard slice</h3>
+  <p><code>xWins</code>, <code>oWins</code>, <code>draws</code>, plus loading/error for API calls.</p>
+  <h3>Typical move flow</h3>
+  <ol>
+    <li>Click cell → <code>playMove</code> thunk.</li>
+    <li><code>validateMove</code> → reject invalid moves with message.</li>
+    <li><code>applyMoveToBoard</code> → reducer <code>APPLY_MOVE</code>.</li>
+    <li>If finished → <code>recordGameResultIfNeeded</code> (scoreboard once).</li>
+    <li><code>syncGameState</code> → PATCH game.</li>
+    <li>Computer mode → <code>playComputerTurn</code> if O’s turn.</li>
+  </ol>
+
+  <h2>7. Game logic library</h2>
+  <table>
+    <tr><th>Module</th><th>Responsibility</th></tr>
+    <tr><td>board.ts</td><td>Empty board; cell index ↔ row/column.</td></tr>
+    <tr><td>validation.ts</td><td>Bounds, turn, mode, occupied cells, game status.</td></tr>
+    <tr><td>win.ts</td><td>Lines, winner, draw.</td></tr>
+    <tr><td>game-logic.ts</td><td>Apply move; rebuild from history (undo).</td></tr>
+    <tr><td>computer.ts</td><td>Win → block → centre → corner → first free cell.</td></tr>
+  </table>
+
+  <h2>8. Mock API</h2>
+  <table>
+    <tr><th>Method</th><th>Endpoint</th><th>Purpose</th></tr>
+    <tr><td>GET</td><td>/scoreboard/1</td><td>Load scores</td></tr>
+    <tr><td>PATCH</td><td>/scoreboard/1</td><td>Update / reset scores</td></tr>
+    <tr><td>POST</td><td>/games</td><td>Create game</td></tr>
+    <tr><td>PATCH</td><td>/games/:id</td><td>Sync game state</td></tr>
+  </table>
+  <p><code>scoreboard</code> in db.json must be an <strong>array</strong> so <code>/scoreboard/1</code> works. Client validates all moves; server stores JSON only.</p>
+
+  <h2>9. UI (MUI)</h2>
+  <p>GamePage: mode select, live status, board, Undo / Reset Game / Reset Scoreboard, history table, scoreboard card. Board cells are keyboard-accessible; winning cells use colour and border (not colour alone).</p>
+
+  <h2>10. Key design decisions</h2>
+  <table>
+    <tr><th>Topic</th><th>Choice</th><th>Reason</th></tr>
+    <tr><td>Undo after win/draw</td><td>Disabled</td><td>No scoreboard rollback.</td></tr>
+    <tr><td>Mode change</td><td>Reset board, keep scoreboard</td><td>Per specification.</td></tr>
+    <tr><td>Scoreboard</td><td>isResultRecorded</td><td>One update per completed game.</td></tr>
+  </table>
+
+  <h2>11. How to run (end-to-end)</h2>
+  <ol>
+    <li><code>cd tic-tac-toe && npm install</code></li>
+    <li><code>npm run api</code> → port 3000</li>
+    <li><code>npm run start</code> → port 4200 (or <code>npm run dev</code> for both)</li>
+    <li>Open <strong>http://localhost:4200</strong> for the game.</li>
+    <li><code>npm test</code> for unit tests.</li>
+  </ol>
+
+  <h2>12. Testing</h2>
+  <p>Covers valid/invalid moves, wins, draws, undo, computer AI priorities, reducer reset/undo, App smoke render. Run: <code>nx test tic-tac-toe</code>.</p>
+
+  <h2>13. Limitations</h2>
+  <ul>
+    <li>Single scoreboard record (id: 1).</li>
+    <li>No auth or multi-tenant isolation.</li>
+    <li>API required for persistence; game rules always run in the browser.</li>
+  </ul>
+
+  <h2>14. Summary</h2>
+  <p>A <strong>spec-driven, layered</strong> React app: pure logic in <strong>util-game-logic</strong>, state and HTTP in <strong>data-access</strong>, UI in <strong>feature/ui</strong> libraries, persistence via <strong>json-server</strong>. This supports technical review of both behaviour and engineering structure.</p>
+</body>
+</html>
